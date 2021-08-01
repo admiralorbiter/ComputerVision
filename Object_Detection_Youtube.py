@@ -10,6 +10,17 @@ class ObjectDetection:
     Class implements Yolo5 model to make inferences on a youtube video using Opencv2.
     """
 
+    def show_webcam(self, stream):
+       cap = cv2.VideoCapture('Labeled_Video.avi')
+       while(cap.isOpened()):
+           ret, frame = cap.read()
+           cv2.imshow('frame', frame)
+           if cv2.waitKey(1) & 0xFF == ord('q'):
+               break
+       cap.release()
+       cv2.destroyAllWindows()
+
+
     def __init__(self, url, out_file="Labeled_Video.avi"):
         """
         Initializes the class with youtube url and output file.
@@ -85,7 +96,7 @@ class ObjectDetection:
         and write the output into a new file.
         :return: void
         """
-        player = self.get_video_from_url()
+        player = cv2.VideoCapture(0)#self.get_video_from_url()
         assert player.isOpened()
         x_shape = int(player.get(cv2.CAP_PROP_FRAME_WIDTH))
         y_shape = int(player.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -101,6 +112,7 @@ class ObjectDetection:
             fps = 1/np.round(end_time - start_time, 3)
             print(f"Frames Per Second : {fps}")
             out.write(frame)
+            
 
 # Create a new object and execute.
 a = ObjectDetection("https://www.youtube.com/watch?v=dwD1n7N7EAg")
